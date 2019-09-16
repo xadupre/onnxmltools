@@ -1,5 +1,6 @@
 from distutils.version import StrictVersion
 
+import numpy as np
 import onnx
 import pandas
 import unittest
@@ -29,7 +30,8 @@ class TestSparkmlTokenizer(SparkMlTestCase):
         data_np = data.toPandas().text.values.reshape([1, 1])
         paths = save_data_models(data_np, expected, model, model_onnx, basename="SparkmlTokenizer")
         onnx_model_path = paths[3]
-        output, output_shapes = run_onnx_model(['prediction'], data_np, onnx_model_path)
+        expected = np.array(expected[0]).reshape((1, 3))
+        output, output_shapes = run_onnx_model(['words'], data_np, onnx_model_path)
         compare_results(expected, output, decimal=5)
 
 

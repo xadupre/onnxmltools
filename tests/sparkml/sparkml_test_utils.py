@@ -106,6 +106,11 @@ def run_onnx_model(output_names, input, onnx_model):
     for k in inputs:
         if isinstance(inputs[k], list):
             inputs[k] = numpy.array(inputs[k])
+    names = set(o.name for o in sess.get_outputs())
+    for on in output_names:
+        if on not in names:
+            raise NameError("Unknown output '{}' (must be in {})".format(
+                on, names))
     output = sess.run(output_names, inputs)
     output_shapes = [_.shape for _ in sess.get_outputs()]
     return output, output_shapes
@@ -156,7 +161,7 @@ def compare_results(expected, output, decimal=5):
         if isinstance(msg, ExpectedAssertionError):
             raise msg
         if msg:
-            raise OnnxRuntimeAssertionError("Unexpected output\n{1}".format(msg))
+            raise OnnxRuntimeAssertionError("Unexpected output\n{0}".format(msg))
         tested += 1
     else:
         from scipy.sparse.csr import csr_matrix

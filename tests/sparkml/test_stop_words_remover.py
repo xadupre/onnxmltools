@@ -2,6 +2,7 @@ import sys
 import unittest
 from distutils.version import StrictVersion
 
+import numpy as np
 import onnx
 from pyspark.ml.feature import StopWordsRemover
 
@@ -29,7 +30,8 @@ class TestSparkmlStopWordsRemover(SparkMlTestCase):
         data_np = data.toPandas().text.values
         paths = save_data_models(data_np, expected, model, model_onnx, basename="SparkmlStopWordsRemover")
         onnx_model_path = paths[3]
-        output, output_shapes = run_onnx_model(['prediction'], data_np, onnx_model_path)
+        expected = np.array(expected[0])
+        output, output_shapes = run_onnx_model(['words'], data_np, onnx_model_path)
         compare_results(expected, output, decimal=5)
 
 
