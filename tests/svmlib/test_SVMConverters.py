@@ -119,7 +119,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmSvmcLinear", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmSvmcLinear", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPIClProba2(libsvm_model), node,
                             basename="LibSvmSvmcLinear-Dec3",
@@ -144,7 +144,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmSvmc", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmSvmc", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPIClProba2(libsvm_model), node,
                             basename="LibSvmSvmc-Dec2")
@@ -166,7 +166,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmSvmrLinear", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmSvmrLinear", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPIReg(libsvm_model), node,
                             basename="LibSvmSvmrLinear-Dec3")
@@ -188,7 +188,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmSvmr", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmSvmr", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPIReg(libsvm_model), node,
                             basename="LibSvmSvmr")
@@ -210,7 +210,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmNuSvmr", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmNuSvmr", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPIReg(libsvm_model), node,
                             basename="LibSvmNuSvmr")
@@ -234,7 +234,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmNuSvmc", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmNuSvmc", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPIClProba2(libsvm_model), node,
                             basename="LibSvmNuSvmc-Dec2",
@@ -259,7 +259,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmSvmcLinearRaw", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmSvmcLinearRaw", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         # known svm runtime dimension error in ONNX Runtime
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPICl(libsvm_model), node,
@@ -286,7 +286,7 @@ class TestSvmLibSVM(unittest.TestCase):
         libsvm_model = svmutil.svm_train(prob, param)
 
         # known svm runtime dimension error in ONNX Runtime
-        node = convert(libsvm_model, "LibSvmSvmcRaw", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmSvmcRaw", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         dump_data_and_model(X[:5].astype(numpy.float32), SkAPICl(libsvm_model), node,
                             basename="LibSvmSvmcRaw",
@@ -312,7 +312,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmNuSvmcRaw", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmNuSvmcRaw", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         X2 = numpy.vstack([X[:5], X[60:65]])  # 5x0, 5x1
         dump_data_and_model(X2.astype(numpy.float32), SkAPICl(libsvm_model), node,
@@ -338,7 +338,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmNuSvmcMultiRbfRaw", [('input', FloatTensorType(shape=[1, 'None']))])
+        node = convert(libsvm_model, "LibSvmNuSvmcMultiRbfRaw", [('input', FloatTensorType(shape=['None', 'None']))])
         self.assertTrue(node is not None)
         X2 = numpy.vstack([X[:2], X[60:62], X[110:112], X[147:149]])  # 5x0, 5x1
         dump_data_and_model(X2.astype(numpy.float32), SkAPICl(libsvm_model), node,
@@ -364,7 +364,7 @@ class TestSvmLibSVM(unittest.TestCase):
 
         libsvm_model = svmutil.svm_train(prob, param)
 
-        node = convert(libsvm_model, "LibSvmNuSvmcMultiRaw", [('input', FloatTensorType(shape=[1, 2]))])
+        node = convert(libsvm_model, "LibSvmNuSvmcMultiRaw", [('input', FloatTensorType(shape=['None', 2]))])
         self.assertTrue(node is not None)
         X2 = numpy.vstack([X[:2], X[60:62], X[110:112], X[147:149]])  # 5x0, 5x1
         dump_data_and_model(X2.astype(numpy.float32), SkAPICl(libsvm_model), node,
