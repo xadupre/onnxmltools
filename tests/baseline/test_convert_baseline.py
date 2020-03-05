@@ -8,7 +8,7 @@ try:
     from onnxmltools.convert import convert_coreml
     import coremltools
 except ImportError:
-    convert_coreml = None
+    coremltools = None
 
 
 class TestBaseLine(unittest.TestCase):
