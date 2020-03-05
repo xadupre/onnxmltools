@@ -4,8 +4,11 @@ Tests converters for a baseline.
 import os
 import re
 import unittest
-from onnxmltools.convert import convert_coreml
-import coremltools
+try:
+    from onnxmltools.convert import convert_coreml
+    import coremltools
+except ImportError:
+    convert_coreml = None
 
 
 class TestBaseLine(unittest.TestCase):
@@ -44,6 +47,7 @@ class TestBaseLine(unittest.TestCase):
             valid_diff.add(line)
         return valid_diff
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_keras2coreml_Dense_ImageNet_small(self):
         """
         Converting keras2coreml_Dense_ImageNet_small using onnxmltools and comparing with last known good result
