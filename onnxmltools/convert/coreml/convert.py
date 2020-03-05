@@ -4,7 +4,6 @@
 # license information.
 # --------------------------------------------------------------------------
 
-import coremltools
 from uuid import uuid4
 from ...proto import onnx
 from ...proto import onnx_proto, get_opset_number_from_onnx
@@ -47,6 +46,7 @@ def convert(model, name=None, initial_types=None, doc_string='', target_opset=No
         initial_type = [('A', FloatTensorType([40, 12, 1, 1])), 
                         ('B', FloatTensorType([1, 32, 1, 1]))]
     '''
+    import coremltools
     if isinstance(model, coremltools.models.MLModel):
         spec = model.get_spec()
     else:

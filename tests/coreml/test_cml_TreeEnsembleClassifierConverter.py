@@ -11,7 +11,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 from sklearn.ensemble import RandomForestClassifier
 from onnxmltools.convert.coreml.convert import convert
 from onnxmltools.utils import dump_data_and_model
@@ -27,6 +30,7 @@ class TestCoreMLTreeEnsembleClassifierConverter(unittest.TestCase):
         self.assertEqual(len(node.output), 1)
         self.assertTrue('classProbability' in node.output)
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_tree_ensemble_classifier(self):
         X = numpy.array([[0, 1], [1, 1], [2, 0]], dtype=numpy.float32)
         y = [1, 0, 1]

@@ -14,7 +14,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 from onnxmltools.convert.coreml.convert import convert
 from onnxmltools.utils import dump_data_and_model
 
@@ -29,6 +32,7 @@ class TestCoreMLGLMClassifierConverter(unittest.TestCase):
         self.assertEqual(len(node.output), 1)
         self.assertTrue('classProbability' in node.output)
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_glm_classifier(self):
         iris = load_iris()
         X = iris.data[:, :2]

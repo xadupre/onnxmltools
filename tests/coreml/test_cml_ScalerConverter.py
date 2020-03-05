@@ -11,7 +11,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 from sklearn.preprocessing import StandardScaler
 from onnxmltools.convert.coreml.convert import convert
 from onnxmltools.utils import dump_data_and_model
@@ -19,6 +22,7 @@ from onnxmltools.utils import dump_data_and_model
 
 class TestCoreMLScalerConverter(unittest.TestCase):
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_scaler(self):
         model = StandardScaler()
         data = numpy.array([[0, 0, 3], [1, 1, 0], [0, 2, 1], [1, 0, 2]], dtype=numpy.float32)

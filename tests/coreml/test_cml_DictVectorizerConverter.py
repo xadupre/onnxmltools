@@ -9,7 +9,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 import unittest
 from sklearn.feature_extraction import DictVectorizer
 from onnxmltools.convert.coreml.convert import convert
@@ -18,6 +21,7 @@ from onnxmltools.utils import dump_data_and_model
 
 class TestCoreMLDictVectorizerConverter(unittest.TestCase):
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_dict_vectorizer(self):
         model = DictVectorizer()
         data = [{'amy': 1., 'chin': 200.}, {'nice': 3., 'amy': 1.}]

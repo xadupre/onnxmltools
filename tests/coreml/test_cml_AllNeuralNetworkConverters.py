@@ -8,15 +8,19 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-from coremltools.models.neural_network import NeuralNetworkBuilder
-from coremltools.models import datatypes
-from coremltools.proto.FeatureTypes_pb2 import ImageFeatureType
+try:
+    from coremltools.models.neural_network import NeuralNetworkBuilder
+    from coremltools.models import datatypes
+    from coremltools.proto.FeatureTypes_pb2 import ImageFeatureType
+except ImportError:
+    NeuralNetworkBuilder = None
 from distutils.version import StrictVersion
 from onnxmltools import convert_coreml
 from onnxmltools.proto import onnx
 
 class TestNeuralNetworkLayerConverter(unittest.TestCase):
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_inner_product_converter(self):
         input_dim = (3,)
         output_dim = (2,)
@@ -32,6 +36,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_unary_function_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -49,6 +54,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_convolution_converter(self):
         input_dim = (1, 1, 4, 2)
         output_dim = (1, 1, 4, 2)
@@ -66,6 +72,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_pooling_converter(self):
         input_dim = (1, 1, 4, 2)
         output_dim = (1, 1, 4, 2)
@@ -77,6 +84,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_activation_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -87,6 +95,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_embedding_converter(self):
         input_dim = (1, 1, 1, 1)
         output_dim = (1, 2, 1, 1)
@@ -102,6 +111,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_batchnorm_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -121,6 +131,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_mean_variance_normalize_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -131,6 +142,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_l2_normalize_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -141,6 +153,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_softmax_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -151,6 +164,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_lrn_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -161,6 +175,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_crop_converter(self):
         top_crop = 1
         bottom_crop = 1
@@ -176,6 +191,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_padding_converter(self):
         input_dim = (1, 3, 4)
         output_dim = (1, 5, 6)
@@ -187,6 +203,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_upsample_converter(self):
         input_dim = (1, 1, 1)
         output_dim = (1, 2, 2)
@@ -198,6 +215,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_add_converter(self):
         input_dim = (1, 2, 2)
         output_dim = (1, 2, 2)
@@ -208,6 +226,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_multiply_converter(self):
         input_dim = (1, 2, 2)
         output_dim = (1, 2, 2)
@@ -218,6 +237,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_average_converter(self):
         input_dim = (1, 2, 2)
         output_dim = (1, 2, 2)
@@ -228,6 +248,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_scale_converter(self):
         input_dim = (3,)
         output_dim = (3,)
@@ -242,6 +263,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_bias_converter(self):
         input_dim = (2, 1, 1)
         output_dim = (2, 1, 1)
@@ -254,6 +276,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_max_converter(self):
         input_dim = (1, 2, 2)
         output_dim = (1, 2, 2)
@@ -264,6 +287,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_min_converter(self):
         input_dim = (1, 2, 2)
         output_dim = (1, 2, 2)
@@ -274,6 +298,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_dot_product_converter(self):
         input_dim = (3,)
         output_dim = (1,)
@@ -284,6 +309,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_reduce_converter(self):
         input_dim = (1, 2, 2)
         output_dim = (1,)
@@ -294,6 +320,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_load_constant_converter(self):
         value = numpy.ndarray(shape=(1, 1, 2))
         value[:] = [[[-95, 95]]]
@@ -307,6 +334,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_reshape_converter(self):
         input_dim = (1, 1, 2)
         output_dim = (1, 2, 1)
@@ -317,6 +345,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_flatten_converter(self):
         input_dim = (1, 2, 3)
         output_dim = (6, 1, 1)
@@ -327,6 +356,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_permute_converter(self):
         input_dim = (4, 1, 2, 3)
         output_dim = (4, 3, 1, 2)
@@ -337,6 +367,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_concat_converter(self):
         input_dim = (5, 1, 1)
         output_dim = (10, 1, 1)
@@ -347,6 +378,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_split_converter(self):
         input_dim = (8, 1, 1)
         output_dim = (4, 1, 1)
@@ -357,6 +389,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_sequence_repeat_converter(self):
         input_dim = (3, 1, 1)
         output_dim = (9, 1, 1)
@@ -367,6 +400,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_reorganize_data_converter(self):
         block_size = 2
         input_dim = (3, 4 * block_size, 2 * block_size)
@@ -379,6 +413,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_slice_converter(self):
         input_dim = (1, 4, 2)
         output_dim = (1, 2, 2)
@@ -390,6 +425,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_gru_converter(self):
         input_dim = (1, 8)
         output_dim = (1, 2)
@@ -405,6 +441,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_simple_recurrent_converter(self):
         input_dim = (1, 8)
         output_dim = (1, 2)
@@ -420,6 +457,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_unidirectional_lstm_converter(self):
         input_dim = (1, 8)
         output_dim = (1, 2)
@@ -437,6 +475,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_bidirectional_lstm_converter(self):
         input_dim = (1, 8)
         output_dim = (1, 2)
@@ -455,6 +494,7 @@ class TestNeuralNetworkLayerConverter(unittest.TestCase):
         model_onnx = convert_coreml(builder.spec)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(NeuralNetworkBuilder is None, "coremltools not available")
     def test_image_input_type_converter(self):
         dim = (3, 15, 25)
         inputs = [('input', datatypes.Array(*dim))]

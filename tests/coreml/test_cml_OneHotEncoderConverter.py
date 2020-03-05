@@ -13,7 +13,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 from sklearn.preprocessing import OneHotEncoder
 from onnxmltools.convert.coreml.convert import convert
 from onnxmltools.utils.tests_helper import dump_data_and_model
@@ -21,6 +24,7 @@ from onnxmltools.utils.tests_helper import dump_data_and_model
 
 class TestCoremlOneHotEncoderConverter(unittest.TestCase):
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_one_hot_encoder(self):
         script_dir = os.path.dirname(__file__)
         relative_path = "../data/onehot_simple.mlmodel"
@@ -29,6 +33,7 @@ class TestCoremlOneHotEncoderConverter(unittest.TestCase):
         model_onnx = convert(model_coreml)
         self.assertTrue(model_onnx is not None)
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     @unittest.skip('broken with the dump_data_and_model change.')
     def test_conversion_one_column(self):
         scikit_data = [[0], [1], [2], [4], [3], [2], [4], [5], [6], [7]]

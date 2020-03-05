@@ -9,7 +9,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 import unittest
 import numpy
 from sklearn.datasets import make_regression
@@ -20,6 +23,7 @@ from onnxmltools.utils import dump_data_and_model
 
 class TestCoreMLSupportVectorRegressorConverter(unittest.TestCase):
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_support_vector_regressor(self):
         X, y = make_regression(n_features=4, random_state=0)
      

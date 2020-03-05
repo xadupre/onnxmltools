@@ -14,7 +14,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-from coremltools.converters.xgboost import convert as convert_xgb_to_coreml
+try:
+    from coremltools.converters.xgboost import convert as convert_xgb_to_coreml
+except ImportError:
+    convert_xgb_to_coreml = None
 from onnxmltools.convert.coreml import convert as convert_cml
 from xgboost import XGBRegressor
 from onnxmltools.utils import dump_data_and_model
@@ -22,6 +25,7 @@ from onnxmltools.utils import dump_data_and_model
 
 class TestCoreMLTreeEnsembleRegressorConverterXGBoost(unittest.TestCase):
 
+    @unittest.skipIf(convert_xgb_to_coreml is None, "coremltools not available")
     def test_tree_ensemble_regressor_xgboost(self):
         
         this = os.path.dirname(__file__)

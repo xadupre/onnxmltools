@@ -11,7 +11,10 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
-import coremltools
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 from sklearn.datasets import make_regression
 from sklearn.ensemble import RandomForestRegressor
 from onnxmltools.convert.coreml.convert import convert
@@ -20,6 +23,7 @@ from onnxmltools.utils import dump_data_and_model
 
 class TestCoreMLTreeEnsembleRegressorConverter(unittest.TestCase):
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_tree_ensemble_regressor(self):
         X, y = make_regression(n_features=4, random_state=0)
         model = RandomForestRegressor().fit(X, y)

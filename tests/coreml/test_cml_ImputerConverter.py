@@ -11,12 +11,17 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
+try:
+    import coremltools
+except ImportError:
+    coremltools = None
 import sklearn.preprocessing
 from onnxmltools.utils import dump_data_and_model
 
 
 class TestCoreMLImputerConverter(unittest.TestCase):
 
+    @unittest.skipIf(coremltools is None, "coremltools not available")
     def test_imputer(self):
         try:
             model = Imputer(missing_values='NaN', strategy='mean', axis=0)
