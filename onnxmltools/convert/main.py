@@ -156,6 +156,7 @@ def _convert_tf_wrapper(frozen_graph_def,
 
         onnx_graph = tf2onnx.optimizer.optimize_graph(g)
         model_proto = onnx_graph.make_model(doc_string)
+        model_proto.ir_version = 6
 
     return model_proto
 
