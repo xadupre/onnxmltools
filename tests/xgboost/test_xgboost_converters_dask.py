@@ -27,8 +27,7 @@ def score_onnx_model(onnx_model, X_test, y_test):
 
 class TestXGBoostModelsDask(unittest.TestCase):
 
-    @unittest.skipIf(sys.version_info[0] == 2,
-                     reason="xgboost converter not tested on python 2")
+    @unittest.skipIf(True, reason="not complete")
     def test_xgb_regressor(self):
         client = Client()  # connect to cluster
                 
