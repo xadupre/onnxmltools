@@ -46,6 +46,9 @@ class TestXGBoostModelsDask(unittest.TestCase):
                                     {'tree_method': 'hist'},
                                     dtrain,
                                     num_boost_round=4, evals=[(dtrain, 'train')])
+        except ValueError as e:
+            assert "tuple is not allowed for map key" in str(e)
+            return
         except AttributeError as e:
             assert "'NoneType' object has no attribute 'write'" in str(e)
             return
