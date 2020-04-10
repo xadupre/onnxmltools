@@ -54,3 +54,4 @@ CMakeCache.txt
 CMakeFiles/
 *.lock
 *.dirlock
+docs/examples/*.onnx
