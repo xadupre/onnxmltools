@@ -52,4 +52,5 @@ docs/examples/graph.dot.png
 # CMake
 CMakeCache.txt
 CMakeFiles/
-
+*.lock
+*.dirlock

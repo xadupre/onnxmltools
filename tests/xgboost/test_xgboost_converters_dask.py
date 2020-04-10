@@ -36,11 +36,19 @@ class TestXGBoostModelsDask(unittest.TestCase):
         X, y = make_classification(n_samples=100, n_features=10,
                                    chunks=10, n_informative=4,
                                    random_state=0)
-        dtrain = xgb_dask.DaskDMatrix(client, X, y)    
-        dask_model = xgb_dask.train(client,
-                                {'tree_method': 'hist'},
-                                dtrain,
-                                num_boost_round=4, evals=[(dtrain, 'train')])        
+        try:
+            dtrain = xgb_dask.DaskDMatrix(client, X, y)    
+        except ValueError as e:
+            assert "tuple is not allowed for map key" in str(e)
+            return
+        try:
+            dask_model = xgb_dask.train(client,
+                                    {'tree_method': 'hist'},
+                                    dtrain,
+                                    num_boost_round=4, evals=[(dtrain, 'train')])
+        except AttributeError as e:
+            assert "'NoneType' object has no attribute 'write'" in str(e)
+            return
         onnx_model = convert_xgboost(
             dask_model, initial_types=[('X', FloatTensorType([None, 10]))])
 
