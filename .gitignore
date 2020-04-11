@@ -55,3 +55,5 @@ CMakeFiles/
 *.lock
 *.dirlock
 docs/examples/*.onnx
+docs/examples/*.dot
+docs/examples/*.png
