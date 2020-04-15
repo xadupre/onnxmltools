@@ -8,6 +8,7 @@ try:
         setattr(sklearn.preprocessing, 'Imputer', Imputer)
 except ImportError:
     from sklearn.preprocessing import Imputer
+import onnx
 try:
     from coremltools.models.neural_network import NeuralNetworkBuilder
     from coremltools.models import datatypes
@@ -16,7 +17,7 @@ except ImportError:
     NeuralNetworkBuilder = None
 from distutils.version import StrictVersion
 from onnxmltools import convert_coreml
-from onnxmltools.proto import onnx
+
 
 class TestNeuralNetworkLayerConverter(unittest.TestCase):
 
