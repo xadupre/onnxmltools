@@ -59,7 +59,10 @@ def run_tests(library=None, folder=None):
     loader = unittest.TestLoader()	
     suites = []	
 
-    for lib in sorted(library):	
+    for lib in sorted(library):
+        if lib {'Cml', 'Sparkml'}:
+            warnings.warn("Skip '{}'.".format(lib))
+            continue
         subs = available[lib]	
         for sub in subs:	
             fold = os.path.join(this, sub)	
