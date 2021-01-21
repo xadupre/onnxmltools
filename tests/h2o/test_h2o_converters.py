@@ -98,8 +98,8 @@ def _train_test_split_as_frames(x, y, is_str=False, is_classifier=False):
 
 def _train_classifier(model, n_classes, is_str=False, force_y_numeric=False):
     x, y = make_classification(
-        n_classes=n_classes, n_features=100, n_samples=1000,
-        random_state=42, n_informative=7
+        n_classes=n_classes, n_features=20, n_samples=100,
+        random_state=42, n_informative=20, n_redundant=0
     )
     train, test = _train_test_split_as_frames(x, y, is_str, is_classifier=True)
     mojo_path = _make_mojo(model, train, force_y_numeric=force_y_numeric)
@@ -334,7 +334,4 @@ class TestH2OModels(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    cl = TestH2OModels()
-    cl.setUpClass()
-    cl.test_h2o_classifier_multi_cat()
-    unittest.main()
+    unittest.main()    
