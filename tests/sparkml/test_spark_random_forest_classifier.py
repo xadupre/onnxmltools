@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import sys
 import inspect
 import unittest
@@ -41,8 +43,8 @@ class TestSparkmRandomForestClassifier(SparkMlTestCase):
         pipeline = Pipeline(stages=[label_indexer, feature_indexer, rf])
         model = pipeline.fit(data)
         model_onnx = convert_sparkml(model, 'Sparkml RandomForest Classifier', [
-            ('label', StringTensorType([None, 1])),
-            ('features', FloatTensorType([None, feature_count]))
+            ('label', StringTensorType([1, 1])),
+            ('features', FloatTensorType([1, feature_count]))
         ], spark_session=self.spark)
         self.assertTrue(model_onnx is not None)
         # run the model

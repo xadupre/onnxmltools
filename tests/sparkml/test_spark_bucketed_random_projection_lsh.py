@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import sys
 import unittest
 
@@ -26,7 +28,7 @@ class TestBucketedRandomProjectionLSH(SparkMlTestCase):
 
         feature_count = data.first()[1].size
         model_onnx = convert_sparkml(model, 'Sparkml BucketedRandomProjectionLSH', [
-            ('features', FloatTensorType([None, feature_count]))
+            ('features', FloatTensorType([1, feature_count]))
         ], spark_session=self.spark)
         self.assertTrue(model_onnx is not None)
 

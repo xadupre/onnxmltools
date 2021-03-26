@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import sys
 import unittest
 import numpy
@@ -28,7 +30,7 @@ class TestSparkmlLogisticRegression(SparkMlTestCase):
         model = lr.fit(data)
         # the name of the input for Logistic Regression is 'features'
         C = model.numFeatures
-        model_onnx = convert_sparkml(model, 'sparkml logistic regression', [('features', FloatTensorType([None, C]))])
+        model_onnx = convert_sparkml(model, 'sparkml logistic regression', [('features', FloatTensorType([1, C]))])
         self.assertTrue(model_onnx is not None)
         # run the model
         import pandas
@@ -60,7 +62,7 @@ class TestSparkmlLogisticRegression(SparkMlTestCase):
         model = lsvc.fit(data)
         # the name of the input for Logistic Regression is 'features'
         C = model.numFeatures
-        model_onnx = convert_sparkml(model, 'Spark ML Linear SVC', [('features', FloatTensorType([None, C]))])
+        model_onnx = convert_sparkml(model, 'Spark ML Linear SVC', [('features', FloatTensorType([1, C]))])
         self.assertTrue(model_onnx is not None)
         # run the model
         import pandas

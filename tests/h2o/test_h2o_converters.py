@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 """
 Tests h2o's tree-based methods' converters.
 """
@@ -5,7 +7,9 @@ import unittest
 import os
 import sys
 import numpy as np
+from numpy.testing import assert_almost_equal
 import pandas as pd
+from onnxruntime import InferenceSession
 from sklearn.datasets import load_diabetes, load_iris, make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
@@ -13,7 +17,6 @@ import h2o
 from h2o import H2OFrame
 from h2o.estimators.gbm import H2OGradientBoostingEstimator
 from h2o.estimators.random_forest import H2ORandomForestEstimator
-
 from onnxmltools.convert import convert_h2o
 from onnxmltools.utils import dump_data_and_model
 
@@ -96,8 +99,8 @@ def _train_test_split_as_frames(x, y, is_str=False, is_classifier=False):
 
 def _train_classifier(model, n_classes, is_str=False, force_y_numeric=False):
     x, y = make_classification(
-        n_classes=n_classes, n_features=100, n_samples=1000,
-        random_state=42, n_informative=7
+        n_classes=n_classes, n_features=20, n_samples=100,
+        random_state=42, n_informative=20, n_redundant=0
     )
     train, test = _train_test_split_as_frames(x, y, is_str, is_classifier=True)
     mojo_path = _make_mojo(model, train, force_y_numeric=force_y_numeric)
@@ -185,23 +188,20 @@ class TestH2OModels(unittest.TestCase):
             )
 
     @unittest.skipIf(sys.version_info[:2] <= (3, 5), reason="not available")
-    @unittest.skipIf(True, reason="issue with recent version of h2o")
     def test_h2o_regressor_cat(self):
         y = "IsDepDelayed"
         train, test = _prepare_one_hot("airlines.csv", y, exclude_cols=["IsDepDelayed_REC"])
         gbm = H2OGradientBoostingEstimator(ntrees=8, max_depth=5)
         mojo_path = _make_mojo(gbm, train, y=train.columns.index(y))
         onnx_model = _convert_mojo(mojo_path)
-        self.assertIsNot(onnx_model, None)
-        dump_data_and_model(
-            test.values.astype(np.float32),
-            H2OMojoWrapper(mojo_path, list(test.columns)),
-            onnx_model,
-            basename="H2ORegCat-Dec4",
-            allow_failure="StrictVersion("
-                          "onnx.__version__)"
-                          "< StrictVersion('1.3.0')",
-        )
+        sess = InferenceSession(onnx_model.SerializeToString())
+        got = sess.run(None, {'input': test.values.astype(np.float32)})
+        exp = gbm.predict(h2o.H2OFrame(test))
+        dfexp = exp.as_data_frame()
+        exp = dfexp.values[:, -2:]
+        assert_almost_equal(exp, got[1])
+        # probabilities are too close to 0.5
+        # and small discrepencies make labels shift.
 
     def test_h2o_classifier_multi_2class(self):
         gbm = H2OGradientBoostingEstimator(ntrees=7, max_depth=5, distribution="multinomial")
@@ -212,7 +212,6 @@ class TestH2OModels(unittest.TestCase):
 
 
     @unittest.skipIf(sys.version_info[:2] <= (3, 5), reason="not available")
-    @unittest.skipIf(True, reason="issue")
     def test_h2o_classifier_bin_cat(self):
         y = "IsDepDelayed_REC"
         train, test = _prepare_one_hot("airlines.csv", y, exclude_cols=["IsDepDelayed"])
@@ -237,7 +236,6 @@ class TestH2OModels(unittest.TestCase):
         train, test = _prepare_one_hot("airlines.csv", y)
         gbm = H2OGradientBoostingEstimator(ntrees=8, max_depth=5)
         mojo_path = _make_mojo(gbm, train, y=train.columns.index(y))
-        print("****", mojo_path)
         onnx_model = _convert_mojo(mojo_path)
         self.assertIsNot(onnx_model, None)
         dump_data_and_model(
@@ -250,7 +248,6 @@ class TestH2OModels(unittest.TestCase):
                           "< StrictVersion('1.3.0')",
         )
 
-    @unittest.skipIf(True, reason="issue with recent version of h2o")
     def test_h2o_classifier_bin_str(self):
         gbm = H2OGradientBoostingEstimator(ntrees=7, max_depth=5)
         mojo_path, test_data = _train_classifier(gbm, 2, is_str=True)
@@ -337,5 +334,6 @@ class TestH2OModels(unittest.TestCase):
 if __name__ == "__main__":
     cl = TestH2OModels()
     cl.setUpClass()
-    cl.test_h2o_classifier_multi_cat()
-    unittest.main()
+    cl.test_h2o_regressor_cat()
+    stop
+    unittest.main()    

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import unittest
 import sys
 import numpy
@@ -18,7 +20,7 @@ class TestSparkmlBucketizer(SparkMlTestCase):
 
         feature_count = len(data.select('features').first())
         model_onnx = convert_sparkml(model, 'Sparkml Bucketizer', [
-            ('features', FloatTensorType([None, feature_count]))
+            ('features', FloatTensorType([1, feature_count]))
         ])
         self.assertTrue(model_onnx is not None)
         # run the model

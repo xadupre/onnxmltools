@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 """
 Tests CoreML TreeEnsembleRegressor converter.
 """
@@ -27,7 +29,7 @@ class TestCoreMLTreeEnsembleRegressorConverterXGBoost(unittest.TestCase):
 
     @unittest.skipIf(convert_xgb_to_coreml is None, "coremltools not available")
     def test_tree_ensemble_regressor_xgboost(self):
-        
+
         this = os.path.dirname(__file__)
         data_train = pandas.read_csv(os.path.join(this, "xgboost.model.xgb.n4.d3.train.txt"), header=None)
 

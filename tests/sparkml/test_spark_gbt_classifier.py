@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import sys
 import unittest
 from distutils.version import StrictVersion
@@ -7,7 +9,6 @@ import pandas
 import numpy
 from pyspark.ml.classification import GBTClassifier
 from pyspark.ml.linalg import Vectors
-import onnxruntime
 
 from onnxmltools import convert_sparkml
 from onnxmltools.convert.common.data_types import FloatTensorType
@@ -19,7 +20,6 @@ from pyspark.ml.feature import StringIndexer
 class TestSparkmTreeEnsembleClassifier(SparkMlTestCase):
     @unittest.skipIf(sys.version_info[0] == 2, reason="Sparkml not tested on python 2")
     @unittest.skipIf(StrictVersion(onnx.__version__) <= StrictVersion('1.3'), 'Need Greater Opset 9')
-    @unittest.skipIf(StrictVersion(onnxruntime.__version__) <= StrictVersion('0.4.0'), 'Input tensors of wrong rank (0).')
     def test_gbt_classifier(self):
         raw_data = self.spark.createDataFrame([
             (1.0, Vectors.dense(1.0)),
@@ -32,7 +32,7 @@ class TestSparkmTreeEnsembleClassifier(SparkMlTestCase):
         model = gbt.fit(data)
         feature_count = data.first()[1].size
         model_onnx = convert_sparkml(model, 'Sparkml GBT Classifier', [
-            ('features', FloatTensorType([None, feature_count]))
+            ('features', FloatTensorType([1, feature_count]))
         ], spark_session=self.spark)
         self.assertTrue(model_onnx is not None)
         # run the model
