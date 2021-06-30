@@ -12,7 +12,9 @@ from tests.sparkml import SparkMlTestCase
 
 
 class TestSparkmlVectorAssembler(SparkMlTestCase):
-    @unittest.skipIf(sys.version_info[0] == 2, reason="Sparkml not tested on python 2")
+
+    @unittest.skipIf(sys.version_info < (3, 8),
+                     reason="pickle fails on python 3.7")
     def test_model_vector_assembler(self):
         col_names = ["a", "b", "c"]
         model = VectorAssembler(inputCols=col_names, outputCol='features')
@@ -34,7 +36,7 @@ class TestSparkmlVectorAssembler(SparkMlTestCase):
         }
         paths = save_data_models(data_np, expected, model, model_onnx,
                                     basename="SparkmlVectorAssembler")
-        onnx_model_path = paths[3]
+        onnx_model_path = paths[-1]
         output, output_shapes = run_onnx_model(['features'], data_np, onnx_model_path)
         compare_results(expected, output, decimal=5)
 
