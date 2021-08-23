@@ -4,6 +4,7 @@
 Tests CoreML GLMClassifier converter.
 """
 import unittest
+from distutils.version import StrictVersion
 import numpy
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LogisticRegression
@@ -34,7 +35,13 @@ class TestCoreMLGLMClassifierConverter(unittest.TestCase):
         self.assertEqual(len(node.output), 1)
         self.assertTrue('classProbability' in node.output)
 
+<<<<<<< HEAD
     @unittest.skipIf(coremltools is None, "coremltools not available")
+=======
+    @unittest.skipIf(
+        StrictVersion(coremltools.__version__) > StrictVersion("3.1"),
+        reason="untested")
+>>>>>>> cb2782b155ff67dc1e586f36a27c5d032070c801
     def test_glm_classifier(self):
         iris = load_iris()
         X = iris.data[:, :2]

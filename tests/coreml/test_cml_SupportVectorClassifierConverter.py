@@ -3,6 +3,7 @@
 """
 Tests CoreML SupportVectorClassifier converter.
 """
+from distutils.version import StrictVersion
 try:
     from sklearn.impute import SimpleImputer as Imputer
     import sklearn.preprocessing
@@ -62,7 +63,13 @@ class TestCoreMLSupportVectorClassifierConverter(unittest.TestCase):
         self.assertEqual(len(node.output), 1)
         self.assertTrue('classProbability' in node.output)
 
+<<<<<<< HEAD
     @unittest.skipIf(coremltools is None, "coremltools not available")
+=======
+    @unittest.skipIf(
+        StrictVersion(coremltools.__version__) > StrictVersion("3.1"),
+        reason="untested")
+>>>>>>> cb2782b155ff67dc1e586f36a27c5d032070c801
     def test_support_vector_classifier_binary_no_prob(self):
         svm, X = self._fit_binary_classification(SVC(gamma=0.5))
         svm_coreml = coremltools.converters.sklearn.convert(svm)
@@ -75,7 +82,13 @@ class TestCoreMLSupportVectorClassifierConverter(unittest.TestCase):
         dump_data_and_model(X, svm, svm_onnx, basename="CmlBinSVC-Out0",
                             allow_failure=True)
 
+<<<<<<< HEAD
     @unittest.skipIf(coremltools is None, "coremltools not available")
+=======
+    @unittest.skipIf(
+        StrictVersion(coremltools.__version__) > StrictVersion("3.1"),
+        reason="untested")
+>>>>>>> cb2782b155ff67dc1e586f36a27c5d032070c801
     def test_support_vector_classifier_binary_with_prob(self):
         svm, X = self._fit_binary_classification(SVC(probability=True, gamma=0.5))
         svm_coreml = coremltools.converters.sklearn.convert(svm)
@@ -84,7 +97,13 @@ class TestCoreMLSupportVectorClassifierConverter(unittest.TestCase):
         self.validate_zipmap(svm_onnx)
         self._check_model_outputs(svm_onnx, ['classLabel', 'classProbability'])
 
+<<<<<<< HEAD
     @unittest.skipIf(coremltools is None, "coremltools not available")
+=======
+    @unittest.skipIf(
+        StrictVersion(coremltools.__version__) > StrictVersion("3.1"),
+        reason="untested")
+>>>>>>> cb2782b155ff67dc1e586f36a27c5d032070c801
     def test_support_vector_classifier_multiclass_no_prob(self):
         svm, X = self._fit_multi_classification(SVC(gamma=0.5))
         svm_coreml = coremltools.converters.sklearn.convert(svm)
@@ -94,7 +113,13 @@ class TestCoreMLSupportVectorClassifierConverter(unittest.TestCase):
         self.assertEqual(len(nodes), 1)
         self._check_model_outputs(svm_onnx, ['classLabel'])
 
+<<<<<<< HEAD
     @unittest.skipIf(coremltools is None, "coremltools not available")
+=======
+    @unittest.skipIf(
+        StrictVersion(coremltools.__version__) > StrictVersion("3.1"),
+        reason="untested")
+>>>>>>> cb2782b155ff67dc1e586f36a27c5d032070c801
     def test_support_vector_classifier_multiclass_with_prob(self):
         svm, X = self._fit_multi_classification(SVC(probability=True, gamma=0.5))
         svm_coreml = coremltools.converters.sklearn.convert(svm)

@@ -4,6 +4,7 @@
 Tests CoreML TreeEnsembleClassifier converter.
 """
 import unittest
+from distutils.version import StrictVersion
 import numpy
 try:
     from sklearn.impute import SimpleImputer as Imputer
@@ -32,7 +33,13 @@ class TestCoreMLTreeEnsembleClassifierConverter(unittest.TestCase):
         self.assertEqual(len(node.output), 1)
         self.assertTrue('classProbability' in node.output)
 
+<<<<<<< HEAD
     @unittest.skipIf(coremltools is None, "coremltools not available")
+=======
+    @unittest.skipIf(
+        StrictVersion(coremltools.__version__) > StrictVersion("3.1"),
+        reason="untested")
+>>>>>>> cb2782b155ff67dc1e586f36a27c5d032070c801
     def test_tree_ensemble_classifier(self):
         X = numpy.array([[0, 1], [1, 1], [2, 0]], dtype=numpy.float32)
         y = [1, 0, 1]
